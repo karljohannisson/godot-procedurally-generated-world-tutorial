@@ -1,6 +1,6 @@
 extends Node
 
-const GENERATION_BOUND_DISTANCE = 8
+const GENERATION_BOUND_DISTANCE = 128
 const VERTICAL_AMPLITUDE = 10
 
 var noise = FastNoiseLite.new()
@@ -19,11 +19,13 @@ func generate_new_cubes_from_position(player_position):
 		x += (player_position.x - GENERATION_BOUND_DISTANCE)
 		for z in range(GENERATION_BOUND_DISTANCE*2):
 			z += (player_position.z - GENERATION_BOUND_DISTANCE)
-			if !has_cube_been_generated(x,z):
-				var generated_noise = noise.get_noise_2d(x,z)
-				create_cube(Vector3(x,generated_noise*VERTICAL_AMPLITUDE,z), get_color_from_noise(generated_noise))
-				register_cube_generation_at_coordinate(x,z)
-			
+			generate_cube_if_new(x,z)
+
+func generate_cube_if_new(x,z):
+	if !has_cube_been_generated(x,z):
+		var generated_noise = noise.get_noise_2d(x,z)
+		create_cube(Vector3(x,generated_noise*VERTICAL_AMPLITUDE,z), get_color_from_noise(generated_noise))
+		register_cube_generation_at_coordinate(x,z)
 
 func has_cube_been_generated(x,z):
 	if x in generated_cubes and z in generated_cubes[x] and generated_cubes[x][z] == true:
