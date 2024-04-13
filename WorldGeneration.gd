@@ -1,6 +1,6 @@
 extends Node
 
-const GENERATE_DISTANCE_FROM_PLAYER = 8
+const GENERATION_BOUND_DISTANCE = 8
 const VERTICAL_AMPLITUDE = 10
 
 var noise = FastNoiseLite.new()
@@ -15,10 +15,10 @@ func _ready():
 	generate_new_cubes_from_position(player.position)
 
 func generate_new_cubes_from_position(player_position):
-	for x in range(GENERATE_DISTANCE_FROM_PLAYER*2):
-		x += (player_position.x - GENERATE_DISTANCE_FROM_PLAYER)
-		for z in range(GENERATE_DISTANCE_FROM_PLAYER*2):
-			z += (player_position.z - GENERATE_DISTANCE_FROM_PLAYER)
+	for x in range(GENERATION_BOUND_DISTANCE*2):
+		x += (player_position.x - GENERATION_BOUND_DISTANCE)
+		for z in range(GENERATION_BOUND_DISTANCE*2):
+			z += (player_position.z - GENERATION_BOUND_DISTANCE)
 			if !has_cube_been_generated(x,z):
 				var generated_noise = noise.get_noise_2d(x,z)
 				create_cube(Vector3(x,generated_noise*VERTICAL_AMPLITUDE,z), get_color_from_noise(generated_noise))
@@ -45,18 +45,22 @@ func create_cube(position, color):
 	var box_size = Vector3(1,1,1)
 	
 	var static_body = StaticBody3D.new()
+	
 	var collision_shape_3d = CollisionShape3D.new()
 	collision_shape_3d.position = position
 	collision_shape_3d.shape = BoxShape3D.new()
 	collision_shape_3d.shape.size = box_size
 	
 	var mesh = MeshInstance3D.new()
+	
 	var boxmesh = BoxMesh.new()
 	boxmesh.size = box_size
-	var material = StandardMaterial3D.new()
 	
+	var material = StandardMaterial3D.new()
 	material.albedo_color = color
+	
 	boxmesh.material = material
+	
 	mesh.set_mesh(boxmesh)
 	mesh.set_position(position)
 	
