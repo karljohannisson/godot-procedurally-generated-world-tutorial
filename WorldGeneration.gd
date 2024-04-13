@@ -1,6 +1,6 @@
 extends Node
 
-const GENERATION_BOUND_DISTANCE = 128
+const GENERATION_BOUND_DISTANCE = 64
 const VERTICAL_AMPLITUDE = 10
 
 var noise = FastNoiseLite.new()
