@@ -47,9 +47,9 @@ func create_cube(position, color):
 	var box_size = Vector3(1,1,1)
 	
 	var static_body = StaticBody3D.new()
+	static_body.position = position
 	
 	var collision_shape_3d = CollisionShape3D.new()
-	collision_shape_3d.position = position
 	collision_shape_3d.shape = BoxShape3D.new()
 	collision_shape_3d.shape.size = box_size
 	
@@ -63,9 +63,7 @@ func create_cube(position, color):
 	
 	boxmesh.material = material
 	
-	mesh.set_mesh(boxmesh)
-	mesh.set_position(position)
-	
+	mesh.set_mesh(boxmesh)	
 	static_body.add_child(mesh)
 	static_body.add_child(collision_shape_3d)
 	
